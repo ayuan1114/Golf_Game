@@ -7,6 +7,11 @@
 #ifndef GOLF_GAME_BLOCK_H
 #define GOLF_GAME_BLOCK_H
 
+/**
+ * Block object is the block obstacle that appears in some levels
+ * Blocks are walls that the player will bounce off of if they collide with it
+ */
+
 class Block : public Obstacle{
 public:
     SDL_Rect rectH;
@@ -31,6 +36,10 @@ public:
     }
 
 public:
+    /**
+     * draws the block onto the screen
+     * @param renderer the renderer to draw block onto
+     */
     void draw(SDL_Renderer *renderer) {
         SDL_SetRenderDrawColor(renderer, r, g, b, 255);
         SDL_RenderFillRect(renderer, &rectH);
@@ -51,6 +60,11 @@ public:
         arcRGBA(renderer, x + w, y, rad, 270, 360, 0, 0, 0, 255);
     }
 
+    /**
+     * checks if the balls will bounce off of the block
+     * @param ball
+     * @return
+     */
     bool interact(Ball* ball) {
         pair<double, double> colCoord; // coordinates for ball during collision
         pair<double, double> collidVec; // vector of axis of collision
@@ -67,7 +81,7 @@ public:
             ball->velX *= -1;
             return true;
         }
-            // striking right wall
+        // striking right wall
         else if (ball->velX < 0 and abs(ball->x - w - x - ball->rad - rad) < -ball->velX * timeInt and ball->y +
         (ball->x - w - x - ball->rad - rad) * (ball->velY / -ball->velX) >= y and ball->y + (ball->x - w - x - ball->rad - rad) * (ball->velY / -ball->velX) <= y + h) {
             ball->y += ball->velY * timeInt;
@@ -76,7 +90,7 @@ public:
             ball->velX *= -1;
             return true;
         }
-            // striking top wall
+        // striking top wall
         else if (ball->velY > 0 and abs(y - ball->y - ball->rad - rad) < ball->velY * timeInt and ball->x +
         (y - ball->y - ball->rad - rad) * (ball->velX / ball->velY) >= x and ball->x + (y - ball->y - ball->rad - rad) * (ball->velX / ball->velY) <= x + w) {
             ball->x += ball->velX * timeInt;
@@ -86,7 +100,7 @@ public:
             printf("bounce");
             return true;
         }
-            // striking bottom wall
+        // striking bottom wall
         else if (ball->velY < 0 and abs(ball->y - h - y - ball->rad - rad) < -ball->velY * timeInt and ball->x + (ball->y - h - y - ball->rad - rad) * (ball->velX / -ball->velY) >= x and ball->x + (ball->y - h - y - ball->rad - rad) * (ball->velX / -ball->velY) <= x + w) {
             ball->x += ball->velX * timeInt;
             postTime = timeInt - ((ball->y - h - y - ball->rad - rad) / ball->velY);

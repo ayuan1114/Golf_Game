@@ -7,6 +7,9 @@
 #ifndef GOLF_GAME_OBSTACLE_H
 #define GOLF_GAME_OBSTACLE_H
 
+/**
+ * interface for all obstacles in a level that the ball can interact with
+ */
 class Obstacle: public GameObj {
 public:
     string type;

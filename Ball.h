@@ -25,7 +25,7 @@ double project(pair<double, double> v1, pair<double, double> v2) {
 }
 
 /**
- * Ball object is the gold ball that each player controls
+ * Ball object is the golf ball that each player controls
  */
 
 class Ball : public GameObj {
@@ -75,7 +75,6 @@ public:
      * updates the velocity of the ball on the x and y axis based on acceleration
      * @return true if the ball is still moving, false if the ball has stopped
      */
-
     bool updateVel() {
         double vMag = magnitude({velX, velY});
         double aMag = magnitude({accelX, accelY});
@@ -105,7 +104,6 @@ public:
     /**
      * updates the position of the ball along the x and y axis based on the velocity of the ball
      */
-
     void updatePos() {
 
         // right boundary
@@ -139,7 +137,6 @@ public:
      * @param otherBallR radius of other ball
      * @return the position of this ball when the two balls collide
      */
-
     pair<double, double> ballCollid(double otherBallX, double otherBallY, double otherBallR) {
         double vMag = magnitude({velX, velY});
         double xCol, yCol;
@@ -264,7 +261,6 @@ public:
      * @param xy boolean to represent axis of change (false = x, true = y;
      * @param change the amount to change by along the chosen axis
      */
-
     void changeLaunchVect(bool xy, int change) {
         if (!stopped) {
             return;
@@ -302,6 +298,10 @@ public:
         launchMag = magnitude({launchX, launchY});
     }
 
+    /**
+     * generates coordinates for launch arrow tip
+     * @return true if arrow tip should be drawn, false otherwise
+     */
     bool generateArrow() {
         if (launchMag < 5) {
             return false;
@@ -315,6 +315,10 @@ public:
         return true;
     }
 
+    /**
+     * draws the launch vector for the current ball
+     * @param renderer renderer to draw the arrow onto
+     */
     void drawLaunchVector(SDL_Renderer *renderer) {
         // draw launch vector
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -325,11 +329,14 @@ public:
     }
 
 public:
+    /**
+     * draws the ball
+     * @param renderer renderer to draw the arrow onto
+     */
     void draw(SDL_Renderer *renderer) {
         filledCircleRGBA(renderer, x, y, rad, r, g, b, 255 * show);
         aacircleRGBA(renderer, x, y, rad, 0, 0, 0, 255 * show); // outline
     }
-
 };
 
 

@@ -17,6 +17,11 @@ using namespace std;
 #ifndef GOLF_GAME_FRAMEWORK_H
 #define GOLF_GAME_FRAMEWORK_H
 
+/**
+ * the Framework of the game
+ * controls drawing and contains the home loop and game loop
+ */
+
 class Framework{
 public:
 
@@ -39,7 +44,6 @@ public:
     /**
      * contains the data for all the obstacles to be added in each level
      */
-
     void setUpLevels() {
         // level 1
         levels.push_back(Level(20, 20, 100, 900));
@@ -52,6 +56,9 @@ public:
         levels[1].addHole(500, 350, 20, 300, 500);
     }
 
+    /**
+     * contains the data for all the players in the game
+     */
     void addPlayers() {
         balls.push_back(Ball(5, 20, 20, 10, 255, 255, 255));
         balls.push_back(Ball(5, 20, 20, 10, 0, 255, 150));
@@ -60,6 +67,10 @@ public:
         board = Scoreboard(balls.size());
     }
 
+    /**
+     * updates the given ball by checking its interactions with all obstacles in the level and other players
+     * @param curBall the index of the ball to be checked in the balls array
+     */
     void updateBall(int curBall) {
         // update the selected ball
         bool bounced = false;
@@ -115,6 +126,10 @@ public:
         }
     }
 
+    /**
+     * checks if level has been complete by all players
+     * @return true if the level is finished, false otherwise
+     */
     bool levelComplete() {
         // check if all players have finished
         for (int curBall = 0; curBall < balls.size(); curBall++) {
@@ -141,6 +156,9 @@ public:
         return true;
     }
 
+    /**
+     * draws the green checked pattern that makes up the field
+     */
     void drawBackground() {
         // draw dark green tiles for background
         SDL_SetRenderDrawColor(renderer, 0, 235, 0, 255);
@@ -189,6 +207,11 @@ public:
         }
     }
 
+    /**
+     * draws the arrow that bounces above the selected ball
+     * @param ballX x coordinate of the center of the selected ball
+     * @param ballY y coordinate of the center of the selected ball
+     */
     void drawSelectedArrow(double ballX, double ballY) {
         Sint16 arrowX[3] = {(Sint16) ballX, (Sint16) (ballX - 3), (Sint16) (ballX + 3)};
         Sint16 arrowY[3] = {(Sint16) (ballY - 16 - arrowBounce.first), (Sint16) (ballY - 19 - arrowBounce.first), (Sint16) (ballY - 19 - arrowBounce.first)};
@@ -205,9 +228,8 @@ public:
     }
 
     /**
-* method to draw all elements of the game
-*/
-
+     * method to draw all elements of the game
+     */
     void drawGame() {
 
         SDL_RenderClear(renderer);
@@ -262,7 +284,11 @@ public:
         SDL_RenderPresent(renderer);
     }
 
-    bool homeLoop() {
+    /**
+     * the loop that controls the home screen
+     * @return 1 if the start button is clicked and game should start
+     */
+    int homeLoop() {
 
         SDL_Rect startButton;
         startButton.x = 300;
@@ -300,7 +326,7 @@ public:
                     case SDL_MOUSEBUTTONDOWN:
                         if (event.button.button == SDL_BUTTON_LEFT) {
                             if (mouseX > startButton.x and mouseX < startButton.x + startButton.w and mouseY > startButton.y and mouseY < startButton.y + startButton.h) {
-                                return true;
+                                return 1;
                             }
                         }
                         break;
@@ -329,6 +355,9 @@ public:
         }
     }
 
+    /**
+     * the loop that controls the whole game
+     */
     void gameLoop() {
 
         int close = 0;
@@ -438,10 +467,9 @@ private:
     int selectedBall = 0;
     bool action = true;
     int mouseX, mouseY;
-    SDL_Color white = {255, 255, 255, 255};
     const int tileS = 20;
     // arrowBounce.second indicates how much to increment the position fo the arrow
-    // ArrowBounce.first indicates the position offset of the bouncing arrow
+    // arrowBounce.first indicates the position offset of the bouncing arrow
     pair<int, int> arrowBounce = {0, 1};
 };
 

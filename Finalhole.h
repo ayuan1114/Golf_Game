@@ -8,6 +8,10 @@ using namespace std;
 #ifndef GOLF_GAME_FINALHOLE_H
 #define GOLF_GAME_FINALHOLE_H
 
+/**
+ * Finalhole object is the final hole on each level
+ * Finalhole is the hole that the player are trying to reach to complete the level
+ */
 
 class Finalhole : public Obstacle {
 public:
@@ -32,6 +36,10 @@ public:
     }
 
 public:
+    /**
+     * draws the finahole on the screen (flag and hole)
+     * @param renderer
+     */
     void draw(SDL_Renderer *renderer) {
         filledCircleRGBA(renderer, x, y, r, 0, 0, 0, 255);
         SDL_SetRenderDrawColor(renderer, 150, 75, 0, 255);

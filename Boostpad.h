@@ -6,6 +6,10 @@ using namespace std;
 #ifndef GOLF_GAME_BOOSTPAD_H
 #define GOLF_GAME_BOOSTPAD_H
 
+/**
+ * Boostpad object is the boostpad obstacle that appears in some levels
+ * The boostpad accelerates the ball in the direction the boostpad is pointing
+ */
 
 class Boostpad : public Obstacle{
 public:
@@ -26,10 +30,13 @@ public:
         this->rect.h = h;
         this->accel = accel;
         this->angle = (angle / 180) * M_PI;
-        createPosV();
+        calcDirCoord();
     }
 
-    void createPosV() {
+    /**
+     * calculates the coordinates for the arrow in the center of the boostpad that indicates the direction of acceleration
+     */
+    void calcDirCoord() {
         int size = min(rect.w, rect.h) / 15;
         triX[0] = rect.x + (rect.w / 2) - (double) (2 * size * cos(angle) + 5 * size * sin(angle));
         triY[0] = rect.y + (rect.h / 2) - (double) (2 * size * sin(angle) - 5 * size * cos(angle));
@@ -39,6 +46,9 @@ public:
         triY[2] = rect.y + (rect.h / 2) - (double) (2 * size * sin(angle) + 5 * size * cos(angle));
     }
 
+    /**
+     * updates the color of arrow to blnk faster if the boostpad is interacting with the ball
+     */
     void updateEffects() {
         if (activated) {
             if (rInner <= 0) {
@@ -57,6 +67,10 @@ public:
     }
 
 public:
+    /**
+     * draws the boostpad on the screen
+     * @param renderer renderer to draw boostpad on
+     */
     void draw(SDL_Renderer *renderer) {
         SDL_SetRenderDrawColor(renderer, rOuter, gOuter, bOuter, 255);
         SDL_RenderFillRect(renderer, &rect);
@@ -67,6 +81,11 @@ public:
         aapolygonRGBA(renderer, triX, triY, 3, 0, 0, 0, 255);
     }
 
+    /**
+     * checks if the ball is interacting with the boost pad and changes its acceleration if it is
+     * @param ball the ball that the interaction is being checked with
+     * @return true if the ball is interacting with the boostpad, false otherwise
+     */
     bool interact(Ball* ball) {
         if (ball->x <= rect.x + rect.w and ball->x >= rect.x and ball->y <= rect.y + rect.h and ball->y >= rect.y) {
             ball->accelX += accel * cos(angle);
